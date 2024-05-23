@@ -1,0 +1,10 @@
+C:\Users\mehmet.dincer\Desktop\MehDin\.NetCode\001_cellSimulatorV1.1\001_cellSimulatorV1.1\bin\Debug\001_cellSimulatorV1.1.exe.config
+C:\Users\mehmet.dincer\Desktop\MehDin\.NetCode\001_cellSimulatorV1.1\001_cellSimulatorV1.1\bin\Debug\001_cellSimulatorV1.1.exe
+C:\Users\mehmet.dincer\Desktop\MehDin\.NetCode\001_cellSimulatorV1.1\001_cellSimulatorV1.1\bin\Debug\001_cellSimulatorV1.1.pdb
+C:\Users\mehmet.dincer\Desktop\MehDin\.NetCode\001_cellSimulatorV1.1\001_cellSimulatorV1.1\obj\Debug\001_cellSimulatorV1.1.csproj.AssemblyReference.cache
+C:\Users\mehmet.dincer\Desktop\MehDin\.NetCode\001_cellSimulatorV1.1\001_cellSimulatorV1.1\obj\Debug\_001_cellSimulatorV1._1.Form1.resources
+C:\Users\mehmet.dincer\Desktop\MehDin\.NetCode\001_cellSimulatorV1.1\001_cellSimulatorV1.1\obj\Debug\_001_cellSimulatorV1._1.Properties.Resources.resources
+C:\Users\mehmet.dincer\Desktop\MehDin\.NetCode\001_cellSimulatorV1.1\001_cellSimulatorV1.1\obj\Debug\001_cellSimulatorV1.1.csproj.GenerateResource.cache
+C:\Users\mehmet.dincer\Desktop\MehDin\.NetCode\001_cellSimulatorV1.1\001_cellSimulatorV1.1\obj\Debug\001_cellSimulatorV1.1.csproj.CoreCompileInputs.cache
+C:\Users\mehmet.dincer\Desktop\MehDin\.NetCode\001_cellSimulatorV1.1\001_cellSimulatorV1.1\obj\Debug\001_cellSimulatorV1.1.exe
+C:\Users\mehmet.dincer\Desktop\MehDin\.NetCode\001_cellSimulatorV1.1\001_cellSimulatorV1.1\obj\Debug\001_cellSimulatorV1.1.pdb
