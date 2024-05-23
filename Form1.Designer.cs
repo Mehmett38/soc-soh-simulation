@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.groupBoxSerialCom = new System.Windows.Forms.GroupBox();
             this.buttonDisconnect = new System.Windows.Forms.Button();
             this.buttonConnect = new System.Windows.Forms.Button();
@@ -44,7 +47,34 @@
             this.comboBoxPortName = new System.Windows.Forms.ComboBox();
             this.serialPortTI = new System.IO.Ports.SerialPort(this.components);
             this.timerUpdateUart = new System.Windows.Forms.Timer(this.components);
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.groupBoxBattery = new System.Windows.Forms.GroupBox();
+            this.progressBarSOC = new System.Windows.Forms.ProgressBar();
+            this.radioButtonCharge = new System.Windows.Forms.RadioButton();
+            this.radioButtonDischarge = new System.Windows.Forms.RadioButton();
+            this.chartVoltCap = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.labelSOC = new System.Windows.Forms.Label();
+            this.pictureBoxProgVoltage = new System.Windows.Forms.PictureBox();
+            this.pictureBoxStop = new System.Windows.Forms.PictureBox();
+            this.pictureBoxStart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxBattery = new System.Windows.Forms.PictureBox();
+            this.pictureBoxMinimizeForm = new System.Windows.Forms.PictureBox();
+            this.pictureBoxResizeForm = new System.Windows.Forms.PictureBox();
+            this.pictureBoxCloseForm = new System.Windows.Forms.PictureBox();
+            this.labelVolt = new System.Windows.Forms.Label();
+            this.pictureBoxProgFront = new System.Windows.Forms.PictureBox();
             this.groupBoxSerialCom.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this.groupBoxBattery.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chartVoltCap)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxProgVoltage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStop)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBattery)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMinimizeForm)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxResizeForm)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCloseForm)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxProgFront)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBoxSerialCom
@@ -61,9 +91,10 @@
             this.groupBoxSerialCom.Controls.Add(this.comboBoxDataBits);
             this.groupBoxSerialCom.Controls.Add(this.comboBoxBaudRate);
             this.groupBoxSerialCom.Controls.Add(this.comboBoxPortName);
-            this.groupBoxSerialCom.Location = new System.Drawing.Point(12, 10);
+            this.groupBoxSerialCom.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.groupBoxSerialCom.Location = new System.Drawing.Point(12, 39);
             this.groupBoxSerialCom.Name = "groupBoxSerialCom";
-            this.groupBoxSerialCom.Size = new System.Drawing.Size(179, 511);
+            this.groupBoxSerialCom.Size = new System.Drawing.Size(179, 488);
             this.groupBoxSerialCom.TabIndex = 1;
             this.groupBoxSerialCom.TabStop = false;
             this.groupBoxSerialCom.Text = "Serial Communication";
@@ -219,16 +250,229 @@
             // 
             this.timerUpdateUart.Tick += new System.EventHandler(this.timerUpdateUart_Tick);
             // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.panel1.Controls.Add(this.pictureBoxMinimizeForm);
+            this.panel1.Controls.Add(this.pictureBoxResizeForm);
+            this.panel1.Controls.Add(this.pictureBoxCloseForm);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(769, 33);
+            this.panel1.TabIndex = 2;
+            // 
+            // groupBoxBattery
+            // 
+            this.groupBoxBattery.Controls.Add(this.labelVolt);
+            this.groupBoxBattery.Controls.Add(this.labelSOC);
+            this.groupBoxBattery.Controls.Add(this.chartVoltCap);
+            this.groupBoxBattery.Controls.Add(this.radioButtonCharge);
+            this.groupBoxBattery.Controls.Add(this.radioButtonDischarge);
+            this.groupBoxBattery.Controls.Add(this.progressBarSOC);
+            this.groupBoxBattery.Controls.Add(this.pictureBoxProgVoltage);
+            this.groupBoxBattery.Controls.Add(this.pictureBoxStop);
+            this.groupBoxBattery.Controls.Add(this.pictureBoxStart);
+            this.groupBoxBattery.Controls.Add(this.pictureBoxBattery);
+            this.groupBoxBattery.Controls.Add(this.pictureBoxProgFront);
+            this.groupBoxBattery.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.groupBoxBattery.Location = new System.Drawing.Point(197, 39);
+            this.groupBoxBattery.Name = "groupBoxBattery";
+            this.groupBoxBattery.Size = new System.Drawing.Size(560, 488);
+            this.groupBoxBattery.TabIndex = 3;
+            this.groupBoxBattery.TabStop = false;
+            this.groupBoxBattery.Text = "Cell Simulation";
+            // 
+            // progressBarSOC
+            // 
+            this.progressBarSOC.Location = new System.Drawing.Point(191, 203);
+            this.progressBarSOC.Name = "progressBarSOC";
+            this.progressBarSOC.Size = new System.Drawing.Size(160, 23);
+            this.progressBarSOC.TabIndex = 20;
+            // 
+            // radioButtonCharge
+            // 
+            this.radioButtonCharge.AutoSize = true;
+            this.radioButtonCharge.Checked = true;
+            this.radioButtonCharge.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.radioButtonCharge.Location = new System.Drawing.Point(380, 214);
+            this.radioButtonCharge.Name = "radioButtonCharge";
+            this.radioButtonCharge.Size = new System.Drawing.Size(75, 20);
+            this.radioButtonCharge.TabIndex = 21;
+            this.radioButtonCharge.TabStop = true;
+            this.radioButtonCharge.Text = "Charge";
+            this.radioButtonCharge.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonDischarge
+            // 
+            this.radioButtonDischarge.AutoSize = true;
+            this.radioButtonDischarge.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.radioButtonDischarge.Location = new System.Drawing.Point(380, 236);
+            this.radioButtonDischarge.Name = "radioButtonDischarge";
+            this.radioButtonDischarge.Size = new System.Drawing.Size(96, 20);
+            this.radioButtonDischarge.TabIndex = 22;
+            this.radioButtonDischarge.Text = "Discharge";
+            this.radioButtonDischarge.UseVisualStyleBackColor = true;
+            // 
+            // chartVoltCap
+            // 
+            chartArea6.Name = "ChartArea1";
+            this.chartVoltCap.ChartAreas.Add(chartArea6);
+            legend6.LegendStyle = System.Windows.Forms.DataVisualization.Charting.LegendStyle.Row;
+            legend6.Name = "Legend1";
+            this.chartVoltCap.Legends.Add(legend6);
+            this.chartVoltCap.Location = new System.Drawing.Point(19, 277);
+            this.chartVoltCap.Name = "chartVoltCap";
+            series6.ChartArea = "ChartArea1";
+            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series6.Legend = "Legend1";
+            series6.Name = "Series1";
+            this.chartVoltCap.Series.Add(series6);
+            this.chartVoltCap.Size = new System.Drawing.Size(524, 205);
+            this.chartVoltCap.TabIndex = 23;
+            this.chartVoltCap.Text = "chart1";
+            // 
+            // labelSOC
+            // 
+            this.labelSOC.AutoSize = true;
+            this.labelSOC.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.labelSOC.Location = new System.Drawing.Point(244, 207);
+            this.labelSOC.Name = "labelSOC";
+            this.labelSOC.Size = new System.Drawing.Size(51, 16);
+            this.labelSOC.TabIndex = 24;
+            this.labelSOC.Text = "SOC : 0";
+            // 
+            // pictureBoxProgVoltage
+            // 
+            this.pictureBoxProgVoltage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
+            this.pictureBoxProgVoltage.Location = new System.Drawing.Point(367, 38);
+            this.pictureBoxProgVoltage.Name = "pictureBoxProgVoltage";
+            this.pictureBoxProgVoltage.Size = new System.Drawing.Size(23, 150);
+            this.pictureBoxProgVoltage.TabIndex = 19;
+            this.pictureBoxProgVoltage.TabStop = false;
+            // 
+            // pictureBoxStop
+            // 
+            this.pictureBoxStop.Image = global::_001_cellSimulatorV1._1.Properties.Resources.Stop_red_icon;
+            this.pictureBoxStop.Location = new System.Drawing.Point(233, 232);
+            this.pictureBoxStop.Name = "pictureBoxStop";
+            this.pictureBoxStop.Size = new System.Drawing.Size(30, 29);
+            this.pictureBoxStop.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxStop.TabIndex = 17;
+            this.pictureBoxStop.TabStop = false;
+            this.pictureBoxStop.MouseMove += new System.Windows.Forms.MouseEventHandler(this.cellSimulationMauseMove);
+            // 
+            // pictureBoxStart
+            // 
+            this.pictureBoxStart.Image = global::_001_cellSimulatorV1._1.Properties.Resources.Start_icon;
+            this.pictureBoxStart.Location = new System.Drawing.Point(287, 232);
+            this.pictureBoxStart.Name = "pictureBoxStart";
+            this.pictureBoxStart.Size = new System.Drawing.Size(30, 29);
+            this.pictureBoxStart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxStart.TabIndex = 18;
+            this.pictureBoxStart.TabStop = false;
+            this.pictureBoxStart.Click += new System.EventHandler(this.pictureBoxStart_Click);
+            this.pictureBoxStart.MouseMove += new System.Windows.Forms.MouseEventHandler(this.cellSimulationMauseMove);
+            // 
+            // pictureBoxBattery
+            // 
+            this.pictureBoxBattery.Image = global::_001_cellSimulatorV1._1.Properties.Resources.moli;
+            this.pictureBoxBattery.Location = new System.Drawing.Point(179, 29);
+            this.pictureBoxBattery.Name = "pictureBoxBattery";
+            this.pictureBoxBattery.Size = new System.Drawing.Size(182, 166);
+            this.pictureBoxBattery.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxBattery.TabIndex = 10;
+            this.pictureBoxBattery.TabStop = false;
+            this.pictureBoxBattery.Click += new System.EventHandler(this.pictureBoxBattery_Click);
+            this.pictureBoxBattery.MouseMove += new System.Windows.Forms.MouseEventHandler(this.cellSimulationMauseMove);
+            // 
+            // pictureBoxMinimizeForm
+            // 
+            this.pictureBoxMinimizeForm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBoxMinimizeForm.Image = global::_001_cellSimulatorV1._1.Properties.Resources.minimizeIcon;
+            this.pictureBoxMinimizeForm.Location = new System.Drawing.Point(672, 3);
+            this.pictureBoxMinimizeForm.Name = "pictureBoxMinimizeForm";
+            this.pictureBoxMinimizeForm.Size = new System.Drawing.Size(27, 27);
+            this.pictureBoxMinimizeForm.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxMinimizeForm.TabIndex = 3;
+            this.pictureBoxMinimizeForm.TabStop = false;
+            this.pictureBoxMinimizeForm.Click += new System.EventHandler(this.formSizeIconClick);
+            this.pictureBoxMinimizeForm.MouseLeave += new System.EventHandler(this.mauseLeaveEvent);
+            this.pictureBoxMinimizeForm.MouseHover += new System.EventHandler(this.mauseHoverEvent);
+            // 
+            // pictureBoxResizeForm
+            // 
+            this.pictureBoxResizeForm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBoxResizeForm.Image = global::_001_cellSimulatorV1._1.Properties.Resources.minizeIcon;
+            this.pictureBoxResizeForm.Location = new System.Drawing.Point(705, 3);
+            this.pictureBoxResizeForm.Name = "pictureBoxResizeForm";
+            this.pictureBoxResizeForm.Size = new System.Drawing.Size(27, 27);
+            this.pictureBoxResizeForm.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxResizeForm.TabIndex = 3;
+            this.pictureBoxResizeForm.TabStop = false;
+            this.pictureBoxResizeForm.Click += new System.EventHandler(this.formSizeIconClick);
+            this.pictureBoxResizeForm.MouseLeave += new System.EventHandler(this.mauseLeaveEvent);
+            this.pictureBoxResizeForm.MouseHover += new System.EventHandler(this.mauseHoverEvent);
+            // 
+            // pictureBoxCloseForm
+            // 
+            this.pictureBoxCloseForm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBoxCloseForm.Image = global::_001_cellSimulatorV1._1.Properties.Resources.closeIcon;
+            this.pictureBoxCloseForm.Location = new System.Drawing.Point(738, 3);
+            this.pictureBoxCloseForm.Name = "pictureBoxCloseForm";
+            this.pictureBoxCloseForm.Size = new System.Drawing.Size(27, 27);
+            this.pictureBoxCloseForm.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxCloseForm.TabIndex = 3;
+            this.pictureBoxCloseForm.TabStop = false;
+            this.pictureBoxCloseForm.Click += new System.EventHandler(this.formSizeIconClick);
+            this.pictureBoxCloseForm.MouseLeave += new System.EventHandler(this.mauseLeaveEvent);
+            this.pictureBoxCloseForm.MouseHover += new System.EventHandler(this.mauseHoverEvent);
+            // 
+            // labelVolt
+            // 
+            this.labelVolt.AutoSize = true;
+            this.labelVolt.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.labelVolt.Location = new System.Drawing.Point(348, 19);
+            this.labelVolt.Name = "labelVolt";
+            this.labelVolt.Size = new System.Drawing.Size(29, 16);
+            this.labelVolt.TabIndex = 25;
+            this.labelVolt.Text = "V = ";
+            // 
+            // pictureBoxProgFront
+            // 
+            this.pictureBoxProgFront.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.pictureBoxProgFront.Location = new System.Drawing.Point(367, 38);
+            this.pictureBoxProgFront.Name = "pictureBoxProgFront";
+            this.pictureBoxProgFront.Size = new System.Drawing.Size(23, 150);
+            this.pictureBoxProgFront.TabIndex = 26;
+            this.pictureBoxProgFront.TabStop = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(769, 533);
+            this.ClientSize = new System.Drawing.Size(769, 539);
+            this.Controls.Add(this.groupBoxBattery);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.groupBoxSerialCom);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.groupBoxSerialCom.ResumeLayout(false);
             this.groupBoxSerialCom.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.groupBoxBattery.ResumeLayout(false);
+            this.groupBoxBattery.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chartVoltCap)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxProgVoltage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStop)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBattery)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMinimizeForm)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxResizeForm)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCloseForm)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxProgFront)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -250,6 +494,22 @@
         private System.Windows.Forms.ComboBox comboBoxPortName;
         private System.IO.Ports.SerialPort serialPortTI;
         private System.Windows.Forms.Timer timerUpdateUart;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.PictureBox pictureBoxMinimizeForm;
+        private System.Windows.Forms.PictureBox pictureBoxResizeForm;
+        private System.Windows.Forms.PictureBox pictureBoxCloseForm;
+        private System.Windows.Forms.GroupBox groupBoxBattery;
+        private System.Windows.Forms.PictureBox pictureBoxBattery;
+        private System.Windows.Forms.PictureBox pictureBoxStop;
+        private System.Windows.Forms.PictureBox pictureBoxStart;
+        private System.Windows.Forms.ProgressBar progressBarSOC;
+        private System.Windows.Forms.PictureBox pictureBoxProgVoltage;
+        private System.Windows.Forms.RadioButton radioButtonCharge;
+        private System.Windows.Forms.RadioButton radioButtonDischarge;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartVoltCap;
+        private System.Windows.Forms.Label labelSOC;
+        private System.Windows.Forms.Label labelVolt;
+        private System.Windows.Forms.PictureBox pictureBoxProgFront;
     }
 }
 

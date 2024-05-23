@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,6 +47,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BatteryConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BatteryConfig.Designer.cs">
+      <DependentUpon>BatteryConfig.cs</DependentUpon>
+    </Compile>
     <Compile Include="CellOperationClasses\CellBaseClass.cs" />
     <Compile Include="CellOperationClasses\CellLookupMolicel.cs" />
     <Compile Include="CellOperationClasses\CellUserAL.cs" />
@@ -55,10 +62,16 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="formSizeClasses\FormSizeOperation.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerialPortOperation\PortProcess.cs" />
     <Compile Include="SerialPortOperation\SerialPortFileProcess.cs" />
+    <Compile Include="Simulation\BatterySoxInf.cs" />
+    <Compile Include="Simulation\CellSimulate.cs" />
+    <EmbeddedResource Include="BatteryConfig.resx">
+      <DependentUpon>BatteryConfig.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -70,6 +83,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -83,6 +97,24 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\closeIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\minizeIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\minimizeIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\moli.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Stop-red-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Start-icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
