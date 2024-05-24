@@ -22,6 +22,7 @@ namespace _001_cellSimulatorV1._1
         CellUserAL cell = new CellUserAL();
         BatterySoxInf batSox;
         CellSimulate cellSimulater;
+        MouseEventArgs mouseDownLocation;
         public Form1()
         {
             InitializeComponent();
@@ -32,10 +33,21 @@ namespace _001_cellSimulatorV1._1
                                                    comboBoxDataBits.Name, buttonConnect.Name,
                                                    buttonDisconnect.Name, groupBoxSerialCom);
 
+            //used for the check the serial port status
             timerUpdateUart.Start();
+
+            //min-max voltage, capacity, cycle ...all values are located
             cell = new CellUserAL();
+            
+            //Soc, SOH, DOD, Cycle number 
             batSox = new BatterySoxInf();
-            cellSimulater = new CellSimulate(progressBarSOC.Name, pictureBoxProgVoltage.Name, labelSOC.Name, labelVolt.Name);
+
+            //simulate the cell according to the batSox information
+            cellSimulater = new CellSimulate(progressBarSOC.Name, pictureBoxProgVoltage.Name, labelSOC.Name,
+                                            labelVolt.Name, chartVoltCap.Name);
+
+            //to drag the win form
+            mouseDownLocation = new MouseEventArgs(MouseButtons.Left, 0, (this.Width / 2), (panelFormControl.Height / 2), 0);
         }
 
         private void serialPortButtonClick(object sender, EventArgs e)
@@ -115,10 +127,46 @@ namespace _001_cellSimulatorV1._1
             batSox = batCfg.getBattery();
             cellSimulater.batConfigProgressBar(groupBoxBattery, batSox);
         }
-
-        private void pictureBoxStart_Click(object sender, EventArgs e)
+        private void pictureBoxTaskClick(object sender, EventArgs e)
         {
+            if(sender == pictureBoxStart)
+            {
+                cellSimulater.startSimulation(batSox, serialPortTI, groupBoxBattery, radioButtonCharge);
+            }
+            else if(sender == pictureBoxStop)
+            {
+                cellSimulater.stopSimulation();
+            }
+        }
 
+        private void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (sender == panelFormControl)
+            {
+                if (this.WindowState == FormWindowState.Normal)
+                {
+                    if (e.Button == MouseButtons.Left)
+                    {
+                        this.Left = e.X + this.Left - mouseDownLocation.X;
+                        this.Top = ((e.Y + this.Top - mouseDownLocation.Y) < 0) ? 0 : (e.Y + this.Top - mouseDownLocation.Y);
+                    }
+                }
+            }
+        }
+
+        private void panelFormControl_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (sender == panelFormControl)
+            {
+                if (this.WindowState == FormWindowState.Normal)
+                {
+                    if (e.Button == MouseButtons.Left)
+                    {
+                        this.Left = e.X + this.Left - mouseDownLocation.X;
+                        this.Top = ((e.Y + this.Top - mouseDownLocation.Y) < 0) ? 0 : (e.Y + this.Top - mouseDownLocation.Y);
+                    }
+                }
+            }
         }
     }
 }

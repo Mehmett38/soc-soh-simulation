@@ -52,30 +52,36 @@ namespace _001_cellSimulatorV1._1
 
         private void chechCellLimits()
         {
-            float downDodVoltage = CellUserAL.minVoltage * ((float)battery.downDodRatio + 100.0f) / 100.0f;
-            float upDodVoltage = CellUserAL.maxVoltage * (100.0f -  (float)battery.upDodRatio) / 100.0f;
+            //take the cell total capacity
+            battery.totalcapacity = CellUserAL.cellCapacity * (battery.soh / 100.0f);
+
+            //calculate the min and max voltage according to DOD and SOH
+            float downDodCapacity = battery.totalcapacity * (battery.downDodRatio / 100.0f);
+            float upDodCapacity = battery.totalcapacity * ((100.0f - battery.upDodRatio) / 100.0f);
+
+            float downDodVoltage = CellUserAL.tableFindByCapacity(downDodCapacity, CellBaseClass.SystemStatus_e.SYSTEM_DISCHAGING).voltage;
+            float upDodVoltage = CellUserAL.tableFindByCapacity(upDodCapacity, CellBaseClass.SystemStatus_e.SYSTEM_CHARGING).voltage;
 
             battery.minVoltage = (float)downDodVoltage;
             battery.maxVoltage = (float)upDodVoltage;
 
-            if (battery.voltage < downDodVoltage)
+            if (battery.voltage <= downDodVoltage)
             {
                 battery.voltage = downDodVoltage;
             }
-            else if(battery.voltage > upDodVoltage)
+            else if(battery.voltage >= upDodVoltage)
             {
                 battery.voltage = upDodVoltage;
             }
 
+            //calculate the capacity according to DOD
             float dod = (100.0f - battery.downDodRatio - battery.upDodRatio) / 100.0f;
-
-            battery.totalcapacity = CellUserAL.capacity;
             battery.dodCapacity = battery.totalcapacity * dod;
 
+            //find the intantaneous capacity according to voltage, soh and dod
             CellBaseClass cellDatas = CellUserAL.tableFindByVoltage(battery.voltage, CellBaseClass.SystemStatus_e.SYSTEM_IDLE);
 
             battery.batInstantaneousCapacity = cellDatas.capacity * dod * (battery.soh / 100.0f);
-
         }
 
         public BatterySoxInf getBattery()

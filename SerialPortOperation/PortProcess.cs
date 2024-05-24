@@ -9,16 +9,6 @@ using System.Windows.Forms;
 
 namespace _001_cellSimulatorV1._1.SerialPortOperation
 {
-    /*User ENUMS*/
-    public enum SerialPortConnection_e
-    {
-        PORT_NOT_INITIALIZED,
-        PORT_CONNECTED,
-        PORT_DISCONNECTED,
-        PORT_CONNECTION_ERROR,
-    }
-
-
     public class PortProcess
     {
         /*This variable used to reac the control of serial port groupbox*/
@@ -30,7 +20,7 @@ namespace _001_cellSimulatorV1._1.SerialPortOperation
         private string buttonConnectName;
         private string buttonDisconnectName;
 
-        SerialPortConnection_e serialPortStatus;
+        static public SerialPortConnection_e serialPortStatus;
         SerialPortFileProcess serialPortFileSaver;  //save the setting in a txt file and initialize when program restart
         int portNumber;
 

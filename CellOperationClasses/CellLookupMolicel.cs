@@ -12,14 +12,14 @@ namespace _001_cellSimulatorV1._1
         static public int lookupTableLen;
         static public float minVoltage;
         static public float maxVoltage;
-        static public float capacity;
+        static public float cellCapacity;
 
         public CellLookupMolicel()
         {
             lookupTableLen = molicelChargeTable.Count;
             minVoltage = moliceDischargeTable[lookupTableLen - 1].voltage;
             maxVoltage = molicelChargeTable[0].voltage;
-            capacity = molicelChargeTable[0].capacity;
+            cellCapacity = molicelChargeTable[0].capacity;
         }
 
         public static List<CellBaseClass> molicelChargeTable = new List<CellBaseClass>()
