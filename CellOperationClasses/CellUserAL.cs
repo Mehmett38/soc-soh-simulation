@@ -73,7 +73,7 @@ namespace _001_cellSimulatorV1._1.CellClasses
         {
             CellBaseClass cellTable = new CellBaseClass();
 
-            if ((systemStatus == SystemStatus_e.SYSTEM_IDLE) || (systemStatus == SystemStatus_e.SYSTEM_CHARGING))
+            if (systemStatus == SystemStatus_e.SYSTEM_CHARGING)
             {
                 if (capacity >= molicelChargeTable[0].capacity)
                 {
@@ -95,7 +95,7 @@ namespace _001_cellSimulatorV1._1.CellClasses
                     }
                 }
             }
-            else
+            else if(systemStatus == SystemStatus_e.SYSTEM_DISCHAGING)
             {
                 if (capacity >= moliceDischargeTable[0].capacity)
                 {
@@ -112,6 +112,28 @@ namespace _001_cellSimulatorV1._1.CellClasses
                         if (capacity >= moliceDischargeTable[i].capacity)
                         {
                             cellTable = Interpolation(moliceDischargeTable[i], moliceDischargeTable[i - 1], capacity, InterpolationSource_e.INTERPOLATE_BY_CAPACITY);
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (capacity >= molicelIdleTable[0].capacity)
+                {
+                    cellTable = molicelIdleTable[0];
+                }
+                else if (capacity <= molicelIdleTable[lookupTableLen - 1].capacity)
+                {
+                    cellTable = molicelIdleTable[lookupTableLen - 1];
+                }
+                else
+                {
+                    for (int i = 0; i < lookupTableLen; i++)
+                    {
+                        if (capacity >= molicelIdleTable[i].capacity)
+                        {
+                            cellTable = Interpolation(molicelIdleTable[i], molicelIdleTable[i - 1], capacity, InterpolationSource_e.INTERPOLATE_BY_CAPACITY);
                             break;
                         }
                     }
