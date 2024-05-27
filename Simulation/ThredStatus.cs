@@ -10,6 +10,7 @@ namespace _001_cellSimulatorV1._1.Simulation
     {
         THREADS_STOP,
         CHARGE_THREAD_RUNNING,
-        DISCHARGE_THREAD_RUNNING
+        DISCHARGE_THREAD_RUNNING,
+        IDLE_THREAD_RUNNING,
     }
 }

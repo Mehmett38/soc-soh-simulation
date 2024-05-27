@@ -17,6 +17,7 @@ namespace _001_cellSimulatorV1._1.Simulation
     {
         Thread chargeThread;
         Thread dischargeThread;
+        Thread idleThread;
 
         string progSocName;
         string pctBoxVoltageName;
@@ -27,7 +28,7 @@ namespace _001_cellSimulatorV1._1.Simulation
         private BatterySoxInf batSox;
         private SerialPort port;
         private Control groBoxSimulation;
-        ThredStatus thredStatus = ThredStatus.THREADS_STOP;
+        private ThredStatus thredStatus = ThredStatus.THREADS_STOP;
 
         public CellSimulate(string progSocName, string pctBoxVoltageName, string labelSocName, string labelVoltName, string chartvoltCapacityName)
         {
@@ -52,10 +53,14 @@ namespace _001_cellSimulatorV1._1.Simulation
 
         public void startSimulation(BatterySoxInf batSox, SerialPort port, Control groBoxSimulation, RadioButton radioBtnCharge)
         {
-            if (thredStatus != ThredStatus.THREADS_STOP)
+            if (!((thredStatus == ThredStatus.IDLE_THREAD_RUNNING) || (thredStatus == ThredStatus.THREADS_STOP)))
                 return;
 
-            if((batSox.voltage != 0) && (PortProcess.serialPortStatus == SerialPortConnection_e.PORT_CONNECTED))
+            //stop the idle thread
+            if(thredStatus == ThredStatus.IDLE_THREAD_RUNNING)
+                idleThread.Abort();
+
+            if ((batSox.voltage != 0) && (PortProcess.serialPortStatus == SerialPortConnection_e.PORT_CONNECTED))
             {
                 this.batSox = batSox;
                 this.port = port;
@@ -99,17 +104,25 @@ namespace _001_cellSimulatorV1._1.Simulation
                 return;
             }
         }
-        public void stopSimulation()
+        public void stopSimulation(BatterySoxInf batSox, SerialPort port, Control groBoxSimulation)
         {
-            if(thredStatus == ThredStatus.DISCHARGE_THREAD_RUNNING)
+            this.batSox = batSox;
+            this.port = port;
+            this.groBoxSimulation = groBoxSimulation;
+
+            if (thredStatus == ThredStatus.DISCHARGE_THREAD_RUNNING)
             {
                 dischargeThread.Abort();
-                thredStatus = ThredStatus.THREADS_STOP;
+                thredStatus = ThredStatus.IDLE_THREAD_RUNNING;
+                idleThread = new Thread(idleThreadFunc);
+                idleThread.Start();
             }
             else if(thredStatus == ThredStatus.CHARGE_THREAD_RUNNING)
             {
                 chargeThread.Abort();
-                thredStatus = ThredStatus.THREADS_STOP;
+                thredStatus = ThredStatus.IDLE_THREAD_RUNNING;
+                idleThread = new Thread(idleThreadFunc);
+                idleThread.Start();
             }
         }
 
@@ -125,14 +138,12 @@ namespace _001_cellSimulatorV1._1.Simulation
             int milisecond2;
             int delay;
             Random rnd = new Random();
-            int packetNumber = 0;
 
             if(thredStatus != ThredStatus.CHARGE_THREAD_RUNNING)
             resetChart();
 
             while (true)
             {
-                packetNumber++;
                 dateTime = DateTime.Now;
                 milisecond1 = dateTime.Millisecond;
 
@@ -194,7 +205,77 @@ namespace _001_cellSimulatorV1._1.Simulation
             }
 
             MessageBox.Show("Charge Completed");
-            thredStatus = ThredStatus.THREADS_STOP;
+
+            thredStatus = ThredStatus.IDLE_THREAD_RUNNING;
+            idleThread = new Thread(idleThreadFunc);
+            idleThread.Start(); 
+        }
+
+        private void idleThreadFunc()
+        {
+            ProgressBar socProg = (ProgressBar)groBoxSimulation.Controls[progSocName];
+            Chart chartVoltCapacity = (Chart)groBoxSimulation.Controls[chartvoltCapacityName];
+            Label socLabel = (Label)groBoxSimulation.Controls[labelSocName];
+            Label voltLabel = (Label)groBoxSimulation.Controls[labelVoltName];
+            PictureBox voltagePicture = (PictureBox)groBoxSimulation.Controls[pctBoxVoltageName];
+            DateTime dateTime = new System.DateTime(1999, 1, 13, 3, 57, 32, 11);
+            int milisecond1;
+            int milisecond2;
+            int delay;
+            Random rnd = new Random();
+
+            while (true)
+            {
+                dateTime = DateTime.Now;
+                milisecond1 = dateTime.Millisecond;
+
+                batSox.voltage = CellUserAL.tableFindByCapacity(batSox.batInstantaneousCapacity, CellBaseClass.SystemStatus_e.SYSTEM_IDLE).voltage;
+
+                voltagePicture.Invoke(new Action(() =>
+                {
+                    voltagePicture.Height = 150 - (int)(batSox.voltage / batSox.maxVoltage * 150.0f);
+                }));
+
+                chartVoltCapacity.Invoke(new Action(() =>
+                {
+                    chartVoltCapacity.Series[0].Points.AddXY(batSox.batInstantaneousCapacity, batSox.voltage);
+                }));
+
+                socProg.Invoke(new Action(() =>
+                {
+                    socProg.Value = ((int)batSox.batInstantaneousCapacity >= batSox.dodCapacity)
+                                    ? (int)batSox.dodCapacity : (int)batSox.batInstantaneousCapacity;
+                }));
+
+                socLabel.Invoke(new Action(() =>
+                {
+                    socLabel.Text = $"SOC : {(batSox.batInstantaneousCapacity / batSox.dodCapacity * 100.0f)}";
+                }));
+
+                voltLabel.Invoke(new Action(() =>
+                {
+                    voltLabel.Text = $"V : {(batSox.voltage)}/{(batSox.maxVoltage)}";
+                }));
+
+                currentTransmit(0, batSox.voltage, port, 0);
+
+                dateTime = DateTime.Now;
+                milisecond2 = dateTime.Millisecond;
+
+                if (milisecond2 > milisecond1)
+                {
+                    delay = 50 - (milisecond2 - milisecond1);
+                }
+                else
+                {
+                    delay = 50 - (1000 - milisecond1 + milisecond1);
+                }
+
+                delay = (delay > 50) ? 1 : delay;
+                delay = (delay < 0) ? 1 : delay;
+
+                Thread.Sleep(delay);
+            }
         }
 
         private void dischargeThreadFunc()
@@ -209,7 +290,6 @@ namespace _001_cellSimulatorV1._1.Simulation
             int milisecond2;
             int delay;
             Random rnd = new Random();
-            int packetNumber = 0;
 
             if (thredStatus != ThredStatus.DISCHARGE_THREAD_RUNNING)
                 resetChart();
@@ -277,7 +357,9 @@ namespace _001_cellSimulatorV1._1.Simulation
             }
 
             MessageBox.Show("Discharge Completed");
-            thredStatus = ThredStatus.THREADS_STOP;
+            thredStatus = ThredStatus.IDLE_THREAD_RUNNING;
+            idleThread = new Thread(idleThreadFunc);
+            idleThread.Start();
         }
 
         private void resetChart()

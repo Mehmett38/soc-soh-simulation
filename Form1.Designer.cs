@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.groupBoxSerialCom = new System.Windows.Forms.GroupBox();
             this.buttonDisconnect = new System.Windows.Forms.Button();
             this.buttonConnect = new System.Windows.Forms.Button();
@@ -341,7 +341,7 @@
             // 
             this.labelSOC.AutoSize = true;
             this.labelSOC.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.labelSOC.Location = new System.Drawing.Point(235, 207);
+            this.labelSOC.Location = new System.Drawing.Point(227, 207);
             this.labelSOC.Name = "labelSOC";
             this.labelSOC.Size = new System.Drawing.Size(51, 16);
             this.labelSOC.TabIndex = 24;
@@ -349,18 +349,18 @@
             // 
             // chartVoltCap
             // 
-            chartArea2.Name = "ChartArea1";
-            this.chartVoltCap.ChartAreas.Add(chartArea2);
-            legend2.LegendStyle = System.Windows.Forms.DataVisualization.Charting.LegendStyle.Row;
-            legend2.Name = "Legend1";
-            this.chartVoltCap.Legends.Add(legend2);
+            chartArea1.Name = "ChartArea1";
+            this.chartVoltCap.ChartAreas.Add(chartArea1);
+            legend1.LegendStyle = System.Windows.Forms.DataVisualization.Charting.LegendStyle.Row;
+            legend1.Name = "Legend1";
+            this.chartVoltCap.Legends.Add(legend1);
             this.chartVoltCap.Location = new System.Drawing.Point(19, 277);
             this.chartVoltCap.Name = "chartVoltCap";
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            this.chartVoltCap.Series.Add(series2);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chartVoltCap.Series.Add(series1);
             this.chartVoltCap.Size = new System.Drawing.Size(524, 205);
             this.chartVoltCap.TabIndex = 23;
             this.chartVoltCap.Text = "chart1";

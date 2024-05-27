@@ -135,7 +135,7 @@ namespace _001_cellSimulatorV1._1
             }
             else if(sender == pictureBoxStop)
             {
-                cellSimulater.stopSimulation();
+                cellSimulater.stopSimulation(batSox, serialPortTI, groupBoxBattery);
             }
         }
 
