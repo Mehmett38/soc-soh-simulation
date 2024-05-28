@@ -1,4 +1,5 @@
-﻿using System;
+﻿using _001_cellSimulatorV1._1.Simulation;
+using System;
 using System.Collections.Generic;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -17,17 +18,17 @@ namespace _001_cellSimulatorV1._1.CellClasses
             INTERPOLATE_BY_VOLTAGE
         }
 
-        public static CellBaseClass tableFindByVoltage(float voltage, SystemStatus_e systemStatus)
+        public static CellBaseClass tableFindByVoltage(BatterySoxInf bat, SystemStatus_e systemStatus)
         {
             CellBaseClass cellTable = new CellBaseClass();
 
-            if((systemStatus == SystemStatus_e.SYSTEM_IDLE) || (systemStatus == SystemStatus_e.SYSTEM_CHARGING))
+            if(systemStatus == SystemStatus_e.SYSTEM_CHARGING)
             {
-                if(voltage >= molicelChargeTable[0].voltage)
+                if(bat.voltage >= molicelChargeTable[0].voltage)
                 {
                     cellTable = molicelChargeTable[0];
                 }
-                else if (voltage <= molicelChargeTable[lookupTableLen - 1].voltage)
+                else if (bat.voltage <= molicelChargeTable[lookupTableLen - 1].voltage)
                 {
                     cellTable = molicelChargeTable[lookupTableLen - 1];
                 }
@@ -35,21 +36,21 @@ namespace _001_cellSimulatorV1._1.CellClasses
                 {
                     for(int i = 0; i < lookupTableLen; i++)
                     {
-                        if(voltage >= molicelChargeTable[i].voltage)
+                        if(bat.voltage >= molicelChargeTable[i].voltage)
                         {
-                            cellTable = Interpolation(molicelChargeTable[i], molicelChargeTable[i - 1], voltage, InterpolationSource_e.INTERPOLATE_BY_VOLTAGE);
+                            cellTable = Interpolation(molicelChargeTable[i], molicelChargeTable[i - 1], bat.voltage, InterpolationSource_e.INTERPOLATE_BY_VOLTAGE);
                             break;
                         }
                     }
                 }
             }
-            else
+            else if(systemStatus == SystemStatus_e.SYSTEM_DISCHAGING)
             {
-                if (voltage >= moliceDischargeTable[0].voltage)
+                if (bat.voltage >= moliceDischargeTable[0].voltage)
                 {
                     cellTable = moliceDischargeTable[0];
                 }
-                else if (voltage <= moliceDischargeTable[lookupTableLen - 1].voltage)
+                else if (bat.voltage <= moliceDischargeTable[lookupTableLen - 1].voltage)
                 {
                     cellTable = moliceDischargeTable[lookupTableLen - 1];
                 }
@@ -57,21 +58,53 @@ namespace _001_cellSimulatorV1._1.CellClasses
                 {
                     for (int i = 0; i < lookupTableLen; i++)
                     {
-                        if (voltage >= moliceDischargeTable[i].voltage)
+                        if (bat.voltage >= moliceDischargeTable[i].voltage)
                         {
-                            cellTable = Interpolation(moliceDischargeTable[i], moliceDischargeTable[i - 1], voltage, InterpolationSource_e.INTERPOLATE_BY_VOLTAGE);
+                            cellTable = Interpolation(moliceDischargeTable[i], moliceDischargeTable[i - 1], bat.voltage, InterpolationSource_e.INTERPOLATE_BY_VOLTAGE);
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (bat.voltage >= molicelIdleTable[0].voltage)
+                {
+                    cellTable = molicelIdleTable[0];
+                }
+                else if (bat.voltage <= molicelIdleTable[lookupTableLen - 1].voltage)
+                {
+                    cellTable = molicelIdleTable[lookupTableLen - 1];
+                }
+                else
+                {
+                    for (int i = 0; i < lookupTableLen; i++)
+                    {
+                        if (bat.voltage >= molicelIdleTable[i].voltage)
+                        {
+                            cellTable = Interpolation(molicelIdleTable[i], molicelIdleTable[i - 1], bat.voltage, InterpolationSource_e.INTERPOLATE_BY_VOLTAGE);
                             break;
                         }
                     }
                 }
             }
 
-            return cellTable;
+            float interpolatedCapacity = cellTable.capacity * (bat.soh / 100.0f) - bat.downDodCapacity;
+            interpolatedCapacity = (interpolatedCapacity < 0) ? 0 : interpolatedCapacity;
+            interpolatedCapacity = (interpolatedCapacity > bat.netCapacity) ? bat.netCapacity : interpolatedCapacity;
+
+            return new CellBaseClass()
+            {
+                capacity = interpolatedCapacity,
+            }; 
         }
 
-        public static CellBaseClass tableFindByCapacity(float capacity, SystemStatus_e systemStatus)
+        public static CellBaseClass tableFindByCapacity(float capacity, BatterySoxInf bat, SystemStatus_e systemStatus)
         {
             CellBaseClass cellTable = new CellBaseClass();
+
+            capacity += bat.downDodCapacity;
+            capacity = capacity * (100.0f / bat.soh);
 
             if (systemStatus == SystemStatus_e.SYSTEM_CHARGING)
             {

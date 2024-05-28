@@ -52,15 +52,25 @@ namespace _001_cellSimulatorV1._1
 
         private void chechCellLimits()
         {
+            //reset up and down dod value
+            battery.downDodCapacity = 0;
+            battery.upDodCapacity = 0;
+
             //take the cell total capacity
-            battery.totalcapacity = CellUserAL.cellCapacity * (battery.soh / 100.0f);
+            battery.totalcapacity = CellUserAL.cellCapacity;                            //!< system total capacity
+            battery.dodCapacity = battery.totalcapacity * ((100 - battery.downDodRatio -  battery.upDodRatio) / 100.0f);
+            battery.netCapacity = battery.dodCapacity * (battery.soh / 100.0f);                    //!< system SOH capacity
 
-            //calculate the min and max voltage according to DOD and SOH
-            float downDodCapacity = battery.totalcapacity * (battery.downDodRatio / 100.0f);
-            float upDodCapacity = battery.totalcapacity * ((100.0f - battery.upDodRatio) / 100.0f);
+            //calculate min and max capacity according to SOH and dod capacity
+            float downDodCapacity = battery.totalcapacity * (battery.soh / 100.0f) * (battery.downDodRatio / 100.0f);
+            float upDodCapacity = battery.totalcapacity * (battery.soh / 100.0f) * ((100.0f - battery.upDodRatio) / 100.0f);
 
-            float downDodVoltage = CellUserAL.tableFindByCapacity(downDodCapacity, CellBaseClass.SystemStatus_e.SYSTEM_DISCHAGING).voltage;
-            float upDodVoltage = CellUserAL.tableFindByCapacity(upDodCapacity, CellBaseClass.SystemStatus_e.SYSTEM_CHARGING).voltage;
+            float downDodVoltage = CellUserAL.tableFindByCapacity(downDodCapacity, battery, CellBaseClass.SystemStatus_e.SYSTEM_DISCHAGING).voltage;
+            float upDodVoltage = CellUserAL.tableFindByCapacity(upDodCapacity, battery, CellBaseClass.SystemStatus_e.SYSTEM_CHARGING).voltage;
+
+            //set the system down and up dod capacity values !!!NOTE change the order of this function line-60 is needed 
+            battery.downDodCapacity = downDodCapacity;
+            battery.upDodCapacity = upDodCapacity;
 
             battery.minVoltage = (float)downDodVoltage;
             battery.maxVoltage = (float)upDodVoltage;
@@ -74,15 +84,11 @@ namespace _001_cellSimulatorV1._1
                 battery.voltage = upDodVoltage;
             }
 
-            //calculate the capacity according to DOD
-            float dod = (100.0f - battery.downDodRatio - battery.upDodRatio) / 100.0f;
-            battery.dodCapacity = battery.totalcapacity * dod;
-
             //find the intantaneous capacity according to voltage, soh and dod
-            CellBaseClass cellDatas = CellUserAL.tableFindByVoltage(battery.voltage, CellBaseClass.SystemStatus_e.SYSTEM_IDLE);
+            CellBaseClass cellDatas = CellUserAL.tableFindByVoltage(battery, CellBaseClass.SystemStatus_e.SYSTEM_DISCHAGING);
 
-            battery.batInstantaneousCapacity = cellDatas.capacity * dod * (battery.soh / 100.0f);
-        }
+            battery.batInstantaneousCapacity = (cellDatas.capacity < 0.001f) ? 0 : cellDatas.capacity;
+         }
 
         public BatterySoxInf getBattery()
         {

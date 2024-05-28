@@ -45,9 +45,6 @@ namespace _001_cellSimulatorV1._1
             //simulate the cell according to the batSox information
             cellSimulater = new CellSimulate(progressBarSOC.Name, pictureBoxProgVoltage.Name, labelSOC.Name,
                                             labelVolt.Name, chartVoltCap.Name);
-
-            //to drag the win form
-            mouseDownLocation = new MouseEventArgs(MouseButtons.Left, 0, (this.Width / 2), (panelFormControl.Height / 2), 0);
         }
 
         private void serialPortButtonClick(object sender, EventArgs e)
@@ -58,6 +55,7 @@ namespace _001_cellSimulatorV1._1
             }
             else if(sender == buttonDisconnect)
             {
+                cellSimulater.closeSimulation();
                 serialPortOperations.portDisconnet(groupBoxSerialCom, serialPortTI);
             }
         }
@@ -71,6 +69,7 @@ namespace _001_cellSimulatorV1._1
         {
             if(sender == pictureBoxCloseForm)
             {
+                cellSimulater.closeSimulation();
                 FormSizeOperation.formCloseClick(this);
             }
             else if(sender == pictureBoxResizeForm)
@@ -121,6 +120,7 @@ namespace _001_cellSimulatorV1._1
 
         private void pictureBoxBattery_Click(object sender, EventArgs e)
         {
+            //cellSimulater.stopSimulation(batSox, serialPortTI, groupBoxBattery);  //voltage is change
             BatteryConfig batCfg = new BatteryConfig(batSox);
             batCfg.ShowDialog();
 
@@ -147,6 +147,8 @@ namespace _001_cellSimulatorV1._1
                 {
                     if (e.Button == MouseButtons.Left)
                     {
+                        //to drag the win form
+                        mouseDownLocation = new MouseEventArgs(MouseButtons.Left, 0, e.X, e.Y, 0);
                         this.Left = e.X + this.Left - mouseDownLocation.X;
                         this.Top = ((e.Y + this.Top - mouseDownLocation.Y) < 0) ? 0 : (e.Y + this.Top - mouseDownLocation.Y);
                     }

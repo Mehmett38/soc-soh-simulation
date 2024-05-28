@@ -42,12 +42,12 @@ namespace _001_cellSimulatorV1._1.Simulation
         public void batConfigProgressBar(Control control, BatterySoxInf batInf)
         {
             ((PictureBox)control.Controls[pctBoxVoltageName]).Height = 150 - (int)(batInf.voltage / batInf.maxVoltage * 150.0f);
-            ((ProgressBar)control.Controls[progSocName]).Maximum = (int)batInf.dodCapacity;
+            ((ProgressBar)control.Controls[progSocName]).Maximum = (int)batInf.netCapacity;
             ((ProgressBar)control.Controls[progSocName]).Minimum = 0;
 
             ((ProgressBar)control.Controls[progSocName]).Value = (int)batInf.batInstantaneousCapacity;
 
-            ((Label)control.Controls[labelSocName]).Text = $"SOC : { (batInf.batInstantaneousCapacity / batInf.dodCapacity) * 100.0f}";
+            ((Label)control.Controls[labelSocName]).Text = $"SOC : { (batInf.batInstantaneousCapacity / batInf.netCapacity) * 100.0f}";
             ((Label)control.Controls[labelVoltName]).Text = "V : " + (batInf.voltage).ToString() + " / " + (batInf.maxVoltage).ToString();
         }
 
@@ -126,6 +126,24 @@ namespace _001_cellSimulatorV1._1.Simulation
             }
         }
 
+        public void closeSimulation()
+        {
+            if (thredStatus == ThredStatus.DISCHARGE_THREAD_RUNNING)
+            {
+                dischargeThread.Abort();
+            }
+            else if(thredStatus == ThredStatus.CHARGE_THREAD_RUNNING)
+            {
+                chargeThread.Abort();
+            }
+            else if(thredStatus == ThredStatus.IDLE_THREAD_RUNNING)
+            {
+                idleThread.Abort();
+            }
+
+            thredStatus = ThredStatus.THREADS_STOP;
+        }
+
         private void chargeThreadFunc()
         {
             ProgressBar socProg = (ProgressBar)groBoxSimulation.Controls[progSocName];
@@ -149,10 +167,13 @@ namespace _001_cellSimulatorV1._1.Simulation
 
                 float instantCurrent = rnd.Next(0, batSox.maxWidtdrawnCurrent) / 72000.0f;   //72000 = 60 * 60 * 2 , 50ms
                 batSox.batInstantaneousCapacity += instantCurrent;
-                batSox.batInstantaneousCapacity = (batSox.batInstantaneousCapacity > batSox.dodCapacity) 
-                                                  ? batSox.dodCapacity : batSox.batInstantaneousCapacity;
+                if(batSox.batInstantaneousCapacity > batSox.netCapacity)
+                {
+                    instantCurrent -= batSox.batInstantaneousCapacity - batSox.netCapacity; //excess is removed
+                    batSox.batInstantaneousCapacity = batSox.netCapacity;
+                }
 
-                batSox.voltage = CellUserAL.tableFindByCapacity(batSox.batInstantaneousCapacity, CellBaseClass.SystemStatus_e.SYSTEM_CHARGING).voltage;
+                batSox.voltage = CellUserAL.tableFindByCapacity(batSox.batInstantaneousCapacity, batSox, CellBaseClass.SystemStatus_e.SYSTEM_CHARGING).voltage;
 
                 voltagePicture.Invoke(new Action(() =>
                 {
@@ -172,7 +193,7 @@ namespace _001_cellSimulatorV1._1.Simulation
 
                 socLabel.Invoke(new Action(() =>
                 {
-                    socLabel.Text = $"SOC : {(batSox.batInstantaneousCapacity / batSox.dodCapacity * 100.0f)}";
+                    socLabel.Text = $"SOC : {(batSox.batInstantaneousCapacity / batSox.netCapacity * 100.0f)}";
                 }));
 
                 voltLabel.Invoke(new Action(() =>
@@ -200,7 +221,7 @@ namespace _001_cellSimulatorV1._1.Simulation
 
                 Thread.Sleep(delay);
 
-                if(batSox.voltage == batSox.maxVoltage)
+                if(batSox.voltage >= batSox.maxVoltage)
                     break;
             }
 
@@ -229,7 +250,7 @@ namespace _001_cellSimulatorV1._1.Simulation
                 dateTime = DateTime.Now;
                 milisecond1 = dateTime.Millisecond;
 
-                batSox.voltage = CellUserAL.tableFindByCapacity(batSox.batInstantaneousCapacity, CellBaseClass.SystemStatus_e.SYSTEM_IDLE).voltage;
+                batSox.voltage = CellUserAL.tableFindByCapacity(batSox.batInstantaneousCapacity, batSox, CellBaseClass.SystemStatus_e.SYSTEM_IDLE).voltage;
 
                 voltagePicture.Invoke(new Action(() =>
                 {
@@ -249,7 +270,7 @@ namespace _001_cellSimulatorV1._1.Simulation
 
                 socLabel.Invoke(new Action(() =>
                 {
-                    socLabel.Text = $"SOC : {(batSox.batInstantaneousCapacity / batSox.dodCapacity * 100.0f)}";
+                    socLabel.Text = $"SOC : {(batSox.batInstantaneousCapacity / batSox.netCapacity * 100.0f)}";
                 }));
 
                 voltLabel.Invoke(new Action(() =>
@@ -301,10 +322,14 @@ namespace _001_cellSimulatorV1._1.Simulation
 
                 float instantCurrent = rnd.Next(0, batSox.maxWidtdrawnCurrent) / 72000.0f;   //72000 = 60 * 60 * 2 , 50ms
                 batSox.batInstantaneousCapacity -= instantCurrent;
-                batSox.batInstantaneousCapacity = (batSox.batInstantaneousCapacity < 0)
-                                                  ? 0 : batSox.batInstantaneousCapacity;
+                
+                if(batSox.batInstantaneousCapacity < 0)
+                {
+                    instantCurrent += batSox.batInstantaneousCapacity;      //less part is added       + (-)(minus) == will be positive
+                    batSox.batInstantaneousCapacity = 0;
+                }
 
-                batSox.voltage = CellUserAL.tableFindByCapacity(batSox.batInstantaneousCapacity, CellBaseClass.SystemStatus_e.SYSTEM_DISCHAGING).voltage;
+                batSox.voltage = CellUserAL.tableFindByCapacity(batSox.batInstantaneousCapacity, batSox, CellBaseClass.SystemStatus_e.SYSTEM_DISCHAGING).voltage;
 
                 voltagePicture.Invoke(new Action(() =>
                 {
@@ -318,13 +343,13 @@ namespace _001_cellSimulatorV1._1.Simulation
 
                 socProg.Invoke(new Action(() =>
                 {
-                    socProg.Value = ((int)batSox.batInstantaneousCapacity >= batSox.dodCapacity)
+                    socProg.Value = ((int)batSox.batInstantaneousCapacity >= batSox.netCapacity)
                                     ? (int)batSox.dodCapacity : (int)batSox.batInstantaneousCapacity;
                 }));
 
                 socLabel.Invoke(new Action(() =>
                 {
-                    socLabel.Text = $"SOC : {(batSox.batInstantaneousCapacity / batSox.dodCapacity * 100.0f)}";
+                    socLabel.Text = $"SOC : {(batSox.batInstantaneousCapacity / batSox.netCapacity * 100.0f)}";
                 }));
 
                 voltLabel.Invoke(new Action(() =>
@@ -352,7 +377,7 @@ namespace _001_cellSimulatorV1._1.Simulation
 
                 Thread.Sleep(delay);
 
-                if (batSox.voltage == batSox.minVoltage)
+                if (batSox.voltage <= batSox.minVoltage)
                     break;
             }
 
@@ -371,7 +396,7 @@ namespace _001_cellSimulatorV1._1.Simulation
             {
                 chartVoltCapacity.Series[0].Points.Clear();
                 chartVoltCapacity.ChartAreas[0].AxisX.Minimum = 0;
-                chartVoltCapacity.ChartAreas[0].AxisX.Maximum = (int)batSox.dodCapacity;//Math.Round((batInf.currentNum + batInf.maxCurrent / 3500.0f), 3);
+                chartVoltCapacity.ChartAreas[0].AxisX.Maximum = (int)batSox.netCapacity;//Math.Round((batInf.currentNum + batInf.maxCurrent / 3500.0f), 3);
 
                 chartVoltCapacity.ChartAreas[0].AxisY.Minimum = (int)batSox.minVoltage;
                 chartVoltCapacity.ChartAreas[0].AxisY.Maximum = (int)batSox.maxVoltage + 1;//Math.Round((batInf.currentNum + batInf.maxCurrent / 3500.0f), 3);
