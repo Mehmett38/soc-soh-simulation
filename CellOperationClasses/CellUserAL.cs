@@ -89,7 +89,7 @@ namespace _001_cellSimulatorV1._1.CellClasses
                 }
             }
 
-            float interpolatedCapacity = cellTable.capacity * (bat.soh / 100.0f) - bat.downDodCapacity;
+            float interpolatedCapacity = cellTable.capacity * bat.parallelCellNumber * (bat.soh / 100.0f) - bat.downDodCapacity;
             interpolatedCapacity = (interpolatedCapacity < 0) ? 0 : interpolatedCapacity;
             interpolatedCapacity = (interpolatedCapacity > bat.netCapacity) ? bat.netCapacity : interpolatedCapacity;
 
@@ -103,7 +103,9 @@ namespace _001_cellSimulatorV1._1.CellClasses
         {
             CellBaseClass cellTable = new CellBaseClass();
 
-            capacity += bat.downDodCapacity;
+            capacity /= bat.parallelCellNumber;
+
+            capacity += (bat.downDodCapacity / bat.parallelCellNumber);
             capacity = capacity * (100.0f / bat.soh);
 
             if (systemStatus == SystemStatus_e.SYSTEM_CHARGING)

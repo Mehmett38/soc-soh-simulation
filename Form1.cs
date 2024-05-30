@@ -120,7 +120,7 @@ namespace _001_cellSimulatorV1._1
 
         private void pictureBoxBattery_Click(object sender, EventArgs e)
         {
-            //cellSimulater.stopSimulation(batSox, serialPortTI, groupBoxBattery);  //voltage is change
+            cellSimulater.stopSimulation(batSox, serialPortTI, groupBoxBattery);  //voltage is change
             BatteryConfig batCfg = new BatteryConfig(batSox);
             batCfg.ShowDialog();
 

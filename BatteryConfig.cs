@@ -34,6 +34,7 @@ namespace _001_cellSimulatorV1._1
                 textBoxSoh.Text = batSox.soh.ToString();
                 textBoxVoltage.Text = batSox.voltage.ToString();
                 textBoxWidtdrawnCurrent.Text = batSox.maxWidtdrawnCurrent.ToString();
+                textBoxParallelCellNumber.Text = batSox.parallelCellNumber.ToString();
             }
         }
 
@@ -44,6 +45,7 @@ namespace _001_cellSimulatorV1._1
             battery.soh = float.Parse(textBoxSoh.Text);
             battery.voltage = float.Parse(textBoxVoltage.Text);
             battery.maxWidtdrawnCurrent = int.Parse(textBoxWidtdrawnCurrent.Text);
+            battery.parallelCellNumber = int.Parse(textBoxParallelCellNumber.Text);
 
             chechCellLimits();
 
@@ -57,7 +59,7 @@ namespace _001_cellSimulatorV1._1
             battery.upDodCapacity = 0;
 
             //take the cell total capacity
-            battery.totalcapacity = CellUserAL.cellCapacity;                            //!< system total capacity
+            battery.totalcapacity = CellUserAL.cellCapacity * battery.parallelCellNumber;                            //!< system total capacity
             battery.dodCapacity = battery.totalcapacity * ((100 - battery.downDodRatio -  battery.upDodRatio) / 100.0f);
             battery.netCapacity = battery.dodCapacity * (battery.soh / 100.0f);                    //!< system SOH capacity
 

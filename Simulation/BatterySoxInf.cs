@@ -23,6 +23,7 @@ namespace _001_cellSimulatorV1._1.Simulation
         public float netCapacity { get; set; }
         public float dodCapacity { get; set; }
         public float batInstantaneousCapacity { get; set; }
+        public int parallelCellNumber { get; set; }
         public int maxWidtdrawnCurrent { get; set; }
     }
 }

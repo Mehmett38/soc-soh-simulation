@@ -40,15 +40,17 @@
             this.label2 = new System.Windows.Forms.Label();
             this.textBoxWidtdrawnCurrent = new System.Windows.Forms.TextBox();
             this.textBoxVoltage = new System.Windows.Forms.MaskedTextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.textBoxParallelCellNumber = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // buttonSave
             // 
             this.buttonSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.buttonSave.Location = new System.Drawing.Point(86, 340);
+            this.buttonSave.Location = new System.Drawing.Point(86, 375);
             this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(115, 28);
+            this.buttonSave.Size = new System.Drawing.Size(123, 28);
             this.buttonSave.TabIndex = 8;
             this.buttonSave.Text = "Save";
             this.buttonSave.UseVisualStyleBackColor = true;
@@ -105,9 +107,9 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = global::_001_cellSimulatorV1._1.Properties.Resources.moli;
-            this.pictureBox1.Location = new System.Drawing.Point(86, 28);
+            this.pictureBox1.Location = new System.Drawing.Point(74, 12);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(145, 134);
+            this.pictureBox1.Size = new System.Drawing.Size(160, 150);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 12;
             this.pictureBox1.TabStop = false;
@@ -135,7 +137,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.label2.Location = new System.Drawing.Point(28, 290);
+            this.label2.Location = new System.Drawing.Point(28, 318);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(101, 32);
             this.label2.TabIndex = 9;
@@ -144,7 +146,7 @@
             // textBoxWidtdrawnCurrent
             // 
             this.textBoxWidtdrawnCurrent.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.textBoxWidtdrawnCurrent.Location = new System.Drawing.Point(142, 289);
+            this.textBoxWidtdrawnCurrent.Location = new System.Drawing.Point(142, 317);
             this.textBoxWidtdrawnCurrent.Name = "textBoxWidtdrawnCurrent";
             this.textBoxWidtdrawnCurrent.Size = new System.Drawing.Size(133, 22);
             this.textBoxWidtdrawnCurrent.TabIndex = 14;
@@ -158,16 +160,37 @@
             this.textBoxVoltage.Size = new System.Drawing.Size(133, 20);
             this.textBoxVoltage.TabIndex = 16;
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.label5.Location = new System.Drawing.Point(28, 292);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(110, 16);
+            this.label5.TabIndex = 9;
+            this.label5.Text = "Parallel Cell Num";
+            // 
+            // textBoxParallelCellNumber
+            // 
+            this.textBoxParallelCellNumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.textBoxParallelCellNumber.Location = new System.Drawing.Point(142, 289);
+            this.textBoxParallelCellNumber.Name = "textBoxParallelCellNumber";
+            this.textBoxParallelCellNumber.Size = new System.Drawing.Size(133, 22);
+            this.textBoxParallelCellNumber.TabIndex = 14;
+            this.textBoxParallelCellNumber.Text = "1";
+            // 
             // BatteryConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(306, 378);
+            this.ClientSize = new System.Drawing.Size(306, 417);
             this.Controls.Add(this.textBoxVoltage);
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.textBoxWidtdrawnCurrent);
             this.Controls.Add(this.label2);
+            this.Controls.Add(this.textBoxParallelCellNumber);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.textBoxSoh);
             this.Controls.Add(this.Voltage);
             this.Controls.Add(this.label4);
@@ -197,5 +220,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textBoxWidtdrawnCurrent;
         private System.Windows.Forms.MaskedTextBox textBoxVoltage;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox textBoxParallelCellNumber;
     }
 }
